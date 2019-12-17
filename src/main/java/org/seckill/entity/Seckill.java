@@ -85,7 +85,7 @@ public class Seckill {
     public String toString() {
         return "Seckill{" +
                 "seckillId=" + seckillId +
-                ", name='" + name +
+                ", name='" + name + '\'' +
                 ", number=" + number +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
