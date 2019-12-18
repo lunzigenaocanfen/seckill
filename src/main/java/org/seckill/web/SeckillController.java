@@ -4,10 +4,6 @@ import org.seckill.dto.Exposer;
 import org.seckill.dto.SeckillExecution;
 import org.seckill.dto.SeckillResult;
 import org.seckill.entity.Seckill;
-import org.seckill.enums.SeckillStateEnum;
-import org.seckill.exception.RepeatKillException;
-import org.seckill.exception.SeckillCloseException;
-import org.seckill.exception.SeckillException;
 import org.seckill.service.SeckillService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,20 +67,8 @@ public class SeckillController {
             return new SeckillResult<>(false, "未注册");
         }
         SeckillResult<SeckillExecution> result;
-        try {
-            SeckillExecution seckillExecution = seckillService.executeSeckill(seckillId, userPhone, md5);
-            result = new SeckillResult<>(true, seckillExecution);
-        } catch (SeckillCloseException e) {
-            SeckillExecution execution = new SeckillExecution(seckillId, SeckillStateEnum.END);
-            result = new SeckillResult<>(true, execution);
-        } catch (RepeatKillException e) {
-            SeckillExecution execution = new SeckillExecution(seckillId, SeckillStateEnum.REPEAT_KILL);
-            result = new SeckillResult<>(true, execution);
-        } catch (SeckillException e) {
-            logger.error(e.getMessage(), e);
-            SeckillExecution execution = new SeckillExecution(seckillId, SeckillStateEnum.INNER_ERROR);
-            result = new SeckillResult<>(true, execution);
-        }
+        SeckillExecution seckillExecution = seckillService.executeSeckillProcedure(seckillId, userPhone, md5);
+        result = new SeckillResult<>(true, seckillExecution);
         return result;
     }
 
